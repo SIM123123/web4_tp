@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Site;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,14 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('/sitedangereux', function (){
-   $site = Site::all();
-   return view('sitedangereux.index', ['sites' => $site]);
-});
 
-Route::get('/sitedangereux/{id}', function ($id) {
-    $site= Site::find($id);
-    return view('sitedangereux.show', ['site' => $site]);
-});
+Route::get('/sitedangereux', [SiteController::class, 'index']);
+Route::get('/sitedangereux/{id}', [SiteController::class, 'show']);
+Route::get('/search/',[SiteController::class, 'search'])->name('search');
 
 require __DIR__.'/auth.php';

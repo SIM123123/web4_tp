@@ -16,7 +16,7 @@
             <h1 class="font-sans text-4xl mb-4">Recherche</h1>
         </div>
         <div>
-            <form class="flex items-center justify-center">
+            <form action="{{ route('search') }}" method="GET" class="flex items-center justify-center">
                 <input
                     type="search"
                     id="search"
@@ -27,7 +27,7 @@
                     aria-describedby="button-addon1"/>
                 <button
                     class="p-2 bg-blue-200"
-                    type="button"
+                    type="submit"
                     id="button-addon1"
                     data-te-ripple-init
                     data-te-ripple-color="light">
