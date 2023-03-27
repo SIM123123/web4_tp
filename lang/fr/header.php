@@ -1,4 +1,8 @@
 <?php
 return [
-    'Home' =>'Accueil'
+    'Home' =>'Accueil',
+    'Add' => 'Ajouter un site',
+    'List' => 'Sites signalés',
+    'Connexion' => 'Connexion',
+    'Register' => 'Inscription'
 ];

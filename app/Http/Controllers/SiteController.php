@@ -20,6 +20,11 @@ class SiteController extends Controller
         return view('sitedangereux.resultat', ['site' => $sites]);
     }
 
+    public function create(): View
+    {
+        return view('sitedangereux.create');
+    }
+
     public function search(Request $request){
         // Get the search value from the request
         $search = $request->input('search');

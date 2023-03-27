@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Site Dangereux') }}</title>
 
-    <script src="https://kit.fontawesome.com/4cd8c72940.js" crossorigin="anonymous"></script>
+
     <title> Site </title>
 </head>
 <x-navbar>
