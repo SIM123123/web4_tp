@@ -17,20 +17,6 @@
         </div>
         <div>
             <form action="{{ route('search') }}" method="GET" class="flex items-center justify-center">
-                <?php
-                $tableau = [];
-                $adresses = //liste d'adresses
-                $adresseRecherchee = //adresse recherchée par l'utilisateur
-                foreach ($adresses as $adresse) {
-                    $diff = levenshtein($adresseRecherchee, $adresse);
-                    $tableau[$adresse] = $diff;
-                }
-                asort($tableau);
-
-                $tableau[0];
-                $tableau[1];
-                $tableau[2];
-                ?>
                 <input
                     type="search"
                     id="search"

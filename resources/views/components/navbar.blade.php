@@ -10,7 +10,14 @@
 <body class="antialiased">
     <header>
         @if (Route::has('login'))
-            <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right bg-blue-500 w-full">
+            <div class=" flex flex-row place-content-center sm:fixed sm:top-0 sm:right-0 p-2 text-right bg-blue-500 w-full">
+
+                <div class="">
+                    <h1  class="text-xl font-bold font-sans"> <a href="/"> SaferBrowser </a>  </h1>
+                </div>
+
+                <div class="grow h-14"></div>
+
                 <a href="/" class="font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Home') }}</a>
                 <a href="{{ route('create') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Add') }}</a>
                 @auth
