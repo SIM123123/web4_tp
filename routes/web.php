@@ -15,9 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [SiteController::class,'welcome']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -33,5 +31,6 @@ Route::get('/sitedangereux', [SiteController::class, 'index']);
 Route::get('/sitedangereux/create', [SiteController::class, 'create'])->name('create');
 Route::get('/sitedangereux/{id}', [SiteController::class, 'show']);
 Route::get('/search/',[SiteController::class, 'search'])->name('search');
+
 
 require __DIR__.'/auth.php';

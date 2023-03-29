@@ -18,7 +18,20 @@
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
                     Image
                 </label>
-                <input class="w-full py-2 px-3" id="image" type="file">
+                <input class="w-full py-2 px-3" id="image" type="file" name="image"  accept="image/*"  max-file-size="1024">
+                <?php
+                        if (isset($_FILES["image"])) {
+                            echo "test";
+                            list($largeur, $hauteur) = getimagesize($_FILES["image"]["tmp_name"]);
+                            if ($largeur > 1024 || $hauteur > 1024) {
+                                echo "Les dimensions sont trop élevés.";
+                                exit;
+                            }
+                        } else {
+                            echo "pas d'image";
+                        }
+                        var_dump($_FILES);
+                ?>
             </div>
             <div class="flex items-center justify-between">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">

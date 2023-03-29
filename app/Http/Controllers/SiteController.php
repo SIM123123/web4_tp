@@ -14,6 +14,17 @@ class SiteController extends Controller
         return view('sitedangereux.index' , ['sites' => $sites]);
     }
 
+    public function welcome(Request $request): View
+    {
+        if ($request->filled('search')) {
+            $sites = Site::search($request->search)->get();
+        } else {
+            $sites = Site::get()->take('3');
+        }
+
+        return view('welcome', compact('sites'));
+    }
+
     public function show($id): View
     {
         $sites = Site::find($id);

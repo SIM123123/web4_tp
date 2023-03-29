@@ -18,7 +18,7 @@ class SiteFactory extends Factory
     public function definition(): array
     {
         return [
-            'adresse_site' => $this->faker->url(),
+            'adresse_site' => $this->faker->domainName(),
             'description' => $this->faker->text(30),
             'nb_commentaires' => $this->faker->randomNumber(),
             'nb_votes' => $this->faker->randomNumber()

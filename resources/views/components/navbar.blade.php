@@ -4,15 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <title>Laravel</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://kit.fontawesome.com/4cd8c72940.js" crossorigin="anonymous"></script>
+    <title>{{ config('app.name', 'Site Dangereux') }}</title>
 </head>
 <body class="antialiased">
     <header>
         @if (Route::has('login'))
-            <div class=" flex flex-row place-content-center sm:fixed sm:top-0 sm:right-0 p-2 text-right bg-blue-500 w-full">
+            <div class=" flex flex-row place-content-center items-center sm:fixed sm:top-0 sm:right-0 p-2 text-right bg-blue-500 w-full">
 
-                <div class="">
+                <div>
                     <h1  class="text-xl font-bold font-sans"> <a href="/"> SaferBrowser </a>  </h1>
                 </div>
 
@@ -21,8 +22,9 @@
                 <a href="/" class="font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Home') }}</a>
                 <a href="{{ route('create') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Add') }}</a>
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
                     <a href="/" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.List') }}</a>
+                    <a href="{{ url('/dashboard') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
+                    <a href="{{ route('logout') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Logout') }}</a>
                 @else
                     <a href="{{ route('login') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Connexion') }}</a>
 

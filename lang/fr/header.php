@@ -4,5 +4,6 @@ return [
     'Add' => 'Ajouter un site',
     'List' => 'Sites signalés',
     'Connexion' => 'Connexion',
-    'Register' => 'Inscription'
+    'Register' => 'Inscription',
+    'Logout' => 'Deconnexion'
 ];
