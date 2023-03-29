@@ -14,22 +14,22 @@
             <div class=" flex flex-row place-content-center items-center sm:fixed sm:top-0 sm:right-0 p-2 text-right bg-blue-500 w-full">
 
                 <div>
-                    <h1  class="text-xl font-bold font-sans"> <a href="/"> SaferBrowser </a>  </h1>
+                    <h1  class="text-xl font-bold font-sans text-amber-500"> <a href="/"> SaferBrowser </a>  </h1>
                 </div>
 
                 <div class="grow h-14"></div>
 
-                <a href="/" class="font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Home') }}</a>
-                <a href="{{ route('create') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Add') }}</a>
+                <a href="/" class="font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Home') }}</a>
+                <a href="{{ route('create') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Add') }}</a>
                 @auth
-                    <a href="/" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.List') }}</a>
-                    <a href="{{ url('/dashboard') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                    <a href="{{ route('logout') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Logout') }}</a>
+                    <a href="/" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.List') }}</a>
+                    <a href="{{ url('/dashboard') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
+                    <a href="{{ route('logout') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Logout') }}</a>
                 @else
-                    <a href="{{ route('login') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Connexion') }}</a>
+                    <a href="{{ route('login') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Connexion') }}</a>
 
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Register') }}</a>
+                        <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Register') }}</a>
                     @endif
                 @endauth
             </div>
