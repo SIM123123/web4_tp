@@ -25,11 +25,14 @@
             </form>
         </div>
         <div class=" m-3 ">
-            @foreach($sites as $site)
-                <ul>
-                    <li> {{ $site->adresse_site }} </li>
-                </ul>
-            @endforeach
+            @if(sizeof($tableau) < 3)
+            @else
+                @foreach($tableau as $site)
+                    <ul>
+                        <li> {{ $site->adresse_site }} </li>
+                    </ul>
+                @endforeach
+            @endif
         </div>
     </div>
 </x-navbar>

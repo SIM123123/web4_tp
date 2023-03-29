@@ -11,18 +11,30 @@ class SiteController extends Controller
     public function index(): View
     {
         $sites = Site::all();
-        return view('sitedangereux.index' , ['sites' => $sites]);
+        return view('sitedangereux.index',['sites' => $sites]);
     }
 
     public function welcome(Request $request): View
     {
+        $sites = Site::all();
         if ($request->filled('search')) {
-            $sites = Site::search($request->search)->get();
-        } else {
-            $sites = Site::get()->take('3');
-        }
+            $tableau = array();
+            $shortest = -1;
+                foreach ($sites as $sitetest) {
+                    $diff = levenshtein($request->search, $sitetest->adresse_site,0);
 
-        return view('welcome', compact('sites'));
+                    if ($diff <= $shortest || $shortest < 0) {
+                        array_push($tableau, $sitetest);
+                        $shortest = $diff;
+                    }
+                }
+        } else {
+            $tableau = [];
+        }
+        $tableau = array_reverse($tableau);
+        $tableau = array_slice($tableau,0,3);
+
+        return view('welcome',compact('tableau'));
     }
 
     public function show($id): View
