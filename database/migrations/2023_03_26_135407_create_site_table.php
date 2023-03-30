@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
             $table->string('adresse_site')->unique();
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->text('image')->nullable();
             $table->timestamps();
         });
