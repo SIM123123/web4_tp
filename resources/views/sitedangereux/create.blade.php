@@ -1,4 +1,9 @@
+<?php
+if (isset($_POST['image'])) {
+    header("Location: ./asd");
+    exit();}?>
 <x-navbar>
+
     <div class="w-full max-w-md mx-auto">
         <form method="POST" action="{{ route('store') }}" class="bg-white shadow-md rounded px-8 pb-8 mt-28" >
             @csrf
@@ -20,19 +25,9 @@
                     Image
                 </label>
                 <input class="w-full py-2 px-3" id="image" type="file" name="image"  accept="image/*"  max-file-size="1024">
-                <?php
-                        if (isset($_FILES["image"])) {
-                            list($largeur, $hauteur) = getimagesize($_FILES["image"]["tmp_name"]);
-                            if ($largeur > 1024 || $hauteur > 1024) {
-                                echo "Les dimensions sont trop élevés.";
-                                exit;
-                            }
-                        }
-                        var_dump($_FILES);
-                ?>
             </div>
             <div class="flex items-center justify-between">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                <button type="submit" name="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Ajouter
                 </button>
             </div>

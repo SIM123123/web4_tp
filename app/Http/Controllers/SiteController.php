@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Site;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -49,11 +50,16 @@ class SiteController extends Controller
         return view('welcome', compact('site'));
     }
 
-    public function store(Request $request) : \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
+    public function store(Request $request) : Redirector
     {
         $site = new Site();
         $site->adresse_site = $request->adresse;
         $site->description = $request->description;
+        $this->validate($request, [
+            'adresse' => 'required',
+            'description' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1024|dimensions:max_width=1024,max_height=1024'
+        ]);
         $site->save();
 
         return redirect('/');
