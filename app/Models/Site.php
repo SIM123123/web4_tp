@@ -11,6 +11,14 @@ class Site extends Model
     use HasFactory;
     use Searchable;
 
+    public function commentaires()
+    {
+        return $this->hasMany(Commentaire::class);
+    }
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
     public function toSearchableArray()
     {
         return ['adresse_site' => $this->adresse_site];

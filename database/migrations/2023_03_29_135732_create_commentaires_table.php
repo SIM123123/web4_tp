@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sites', function (Blueprint $table) {
+        Schema::create('commentaires', function (Blueprint $table) {
             $table->id();
-            $table->text('adresse_site');
-            $table->text('description')->nullable();
-            $table->text('image')->nullable();
+            $table->text('commentaire');
+            $table->unsignedBigInteger('idSite');
             $table->timestamps();
+
+            $table->foreign('idSite')
+                ->references('id')
+                ->on('sites')
+                ->onDelete('cascade');
         });
     }
 
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sites');
+        Schema::dropIfExists('commentaires');
     }
 };

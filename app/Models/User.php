@@ -12,6 +12,10 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
     /**
      * The attributes that are mass assignable.
      *

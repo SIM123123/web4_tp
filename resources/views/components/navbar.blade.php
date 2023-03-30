@@ -19,17 +19,23 @@
 
                 <div class="grow h-14"></div>
 
-                <a href="/" class="font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Home') }}</a>
-                <a href="{{ route('create') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Add') }}</a>
+                <a href="/" class="font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Home') }}</a>
+                <a href="{{ route('create') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Add') }}</a>
                 @auth
-                    <a href="/" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.List') }}</a>
-                    <a href="{{ url('/dashboard') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                    <a href="{{ route('logout') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Logout') }}</a>
+                    <a href="/" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.List') }}</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a href="{{ route('logout') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm"
+                                         onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                            {{ __('header.Logout') }}
+                        </a>
+                    </form>
                 @else
-                    <a href="{{ route('login') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Connexion') }}</a>
+                    <a href="{{ route('login') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Connexion') }}</a>
 
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('header.Register') }}</a>
+                        <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Register') }}</a>
                     @endif
                 @endauth
             </div>

@@ -20,8 +20,7 @@ class SiteFactory extends Factory
         return [
             'adresse_site' => $this->faker->domainName(),
             'description' => $this->faker->text(30),
-            'nb_commentaires' => $this->faker->randomNumber(),
-            'nb_votes' => $this->faker->randomNumber()
+            'image' => $this->faker->filePath()
         ];
     }
 }
