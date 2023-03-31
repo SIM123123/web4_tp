@@ -30,8 +30,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/sitedangereux', [SiteController::class, 'index']);
 Route::get('/sitedangereux/create', [SiteController::class, 'create'])->name('create');
 Route::post('/sitedangereux/create', [SiteController::class, 'store'])->name('store');
-Route::get('/sitedangereux/{id}', [SiteController::class, 'show']);
-Route::get('/search/',[SiteController::class, 'search'])->name('search');
+Route::get('/sitedangereux/{id}', [SiteController::class, 'show'])->name('show');
+Route::get('/search',[SiteController::class, 'search'])->name('search');
+
 
 
 require __DIR__.'/auth.php';

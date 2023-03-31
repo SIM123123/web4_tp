@@ -23,21 +23,43 @@ class SiteController extends Controller
         return view('sitedangereux.index' , ['sites' => $sites]);
     }
 
-    public function welcome(Request $request): Application|Factory|View|\Illuminate\Foundation\Application
+    public function welcome(Request $request) : View
     {
         if ($request->filled('search')) {
-            $sites = Site::search($request->search)->get();
+            $sites = Site::search($request->search)->get()->take(3);
+            if (sizeof($sites) < 3) {
+                $sites = Site::all();
+                $tableau = array();
+                $shortest = -1;
+                foreach ($sites as $sitetest) {
+                    $diff = levenshtein($request->search, $sitetest->adresse_site, 0);
+
+                    if ($diff <= $shortest || $shortest < 0) {
+                        array_push($tableau, $sitetest);
+                        $shortest = $diff;
+                    }
+                }
+                $tableau = array_reverse($tableau);
+                $tableau = array_slice($tableau, 0, 3);
+                return view('welcome', compact('tableau'));
+            }
+            $tableau = $sites;
         } else {
-            $sites = Site::get()->take('3');
+            $tableau = [];
         }
 
-        return view('welcome', compact('sites'));
+        return view('welcome', compact('tableau'));
     }
 
     public function show($id): Application|Factory|View|\Illuminate\Foundation\Application
     {
         $sites = Site::find($id);
-        $username = User::findOrFail($sites->idUser)->name;
+        if ($sites->isUser != null) {
+            $username = User::findOrFail($sites->idUser);
+        }
+        else {
+            $username = "Anonyme";
+        }
         return view('sitedangereux.show', ['site' => $sites, 'username' => $username]);
     }
 
@@ -60,15 +82,21 @@ class SiteController extends Controller
     public function store(Request $request) : RedirectResponse
     {
         $site = new Site();
-
         $this->validate($request, [
             'adresse' => 'required',
             'description' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024|dimensions:max_width=1024,max_height=1024'
         ]);
+        $site->adresse_site = $request->adresse;
+        $site->description = $request->description;
+        $image = $request->file('image');
+        if($image != null) {
+            $fichier = $image->getClientOriginalExtension();
+            $location = storage_path('/app/image/');
+            $image->move($location, $fichier);
 
-        $this->recupererDonnees($site, $request);
-
+            $site->image = $location;
+        }
         try {
             $site->save();
         } catch (\Illuminate\Database\QueryException $e) {
@@ -78,33 +106,11 @@ class SiteController extends Controller
         }
 
         if (Auth::check()) {
-            $this->voterAuto($site);
+            $vote = new Vote();
+            $vote->idUser = Auth::id();
+            $vote->idSite = $site->id;
+            $vote->save();
         }
-
         return redirect('/');
-    }
-
-    private function recupererDonnees($site, $request) {
-        $site->adresse_site = $request->adresse;
-        $site->description = $request->description;
-        $image = $request->file('image');
-
-        if($image != null) {
-            $fichier = $image->getClientOriginalName();
-            $location = storage_path('/app/public/image');
-            $image->move($location, $fichier);
-
-            $site->image = $location.$fichier;
-        }
-
-        if (Auth::check()) {
-            $site->idUser = Auth::id();
-        }
-    }
-    private function voterAuto($site) {
-        $vote = new Vote();
-        $vote->idUser = Auth::id();
-        $vote->idSite = $site->id;
-        $vote->save();
     }
 }
