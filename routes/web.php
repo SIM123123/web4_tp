@@ -29,9 +29,14 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/sitedangereux', [SiteController::class, 'index']);
 Route::get('/sitedangereux/create', [SiteController::class, 'create'])->name('create');
+<<<<<<< HEAD
 Route::post('/sitedangereux/create', [SiteController::class, 'store'])->name('store');
 Route::get('/sitedangereux/{id}', [SiteController::class, 'show']);
 Route::get('/search/',[SiteController::class, 'search'])->name('search');
+=======
+Route::get('/sitedangereux/{id}', [SiteController::class, 'show'])->name('show');
+Route::get('/search',[SiteController::class, 'search'])->name('search');
+>>>>>>> 4d5bb63 (lemerge)
 
 
 require __DIR__.'/auth.php';

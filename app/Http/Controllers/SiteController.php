@@ -19,24 +19,54 @@ class SiteController extends Controller
     public function index(): Application|Factory|View|\Illuminate\Foundation\Application
     {
         $sites = Site::all();
+<<<<<<< HEAD
         return view('sitedangereux.index' , ['sites' => $sites]);
+=======
+        return view('sitedangereux.index', ['sites' => $sites]);
+>>>>>>> 4d5bb63 (lemerge)
     }
 
     public function welcome(Request $request): Application|Factory|View|\Illuminate\Foundation\Application
     {
         if ($request->filled('search')) {
+<<<<<<< HEAD
             $sites = Site::search($request->search)->get();
+=======
+
+            $sites = Site::search($request->search)->get()->take(3);
+            if ($sites->isEmpty()) {
+                $sites = Site::all();
+                $tableau = array();
+                $shortest = -1;
+                foreach ($sites as $sitetest) {
+                    $diff = levenshtein($request->search, $sitetest->adresse_site, 0);
+
+                    if ($diff <= $shortest || $shortest < 0) {
+                        array_push($tableau, $sitetest);
+                        $shortest = $diff;
+                    }
+                }
+                $tableau = array_reverse($tableau);
+                $tableau = array_slice($tableau, 0, 3);
+                return view('welcome', compact('tableau'));
+            }
+            $tableau = $sites;
+>>>>>>> 4d5bb63 (lemerge)
         } else {
             $sites = Site::get()->take('3');
         }
 
+<<<<<<< HEAD
         return view('welcome', compact('sites'));
+=======
+        return view('welcome', compact('tableau'));
+>>>>>>> 4d5bb63 (lemerge)
     }
 
     public function show($id): Application|Factory|View|\Illuminate\Foundation\Application
     {
         $sites = Site::find($id);
-        return view('sitedangereux.resultat', ['site' => $sites]);
+        return view('sitedangereux.show', ['site' => $sites]);
     }
 
     public function create(): Application|Factory|View|\Illuminate\Foundation\Application
@@ -44,7 +74,8 @@ class SiteController extends Controller
         return view('sitedangereux.create');
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         // Get the search value from the request
         $search = $request->input('search');
 
