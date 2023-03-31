@@ -91,8 +91,10 @@ class SiteController extends Controller
         $site->description = $request->description;
         $image = $request->file('image');
         if($image != null) {
+
+
             $fichier = $image->getClientOriginalExtension();
-            $location = storage_path('/app/image/');
+            $location = storage_path('/app/public/');
             $image->move($location, $fichier);
 
             $site->image = $location;
