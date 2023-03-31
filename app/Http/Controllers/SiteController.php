@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
+use App\Models\User;
 use App\Models\Vote;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -36,7 +37,8 @@ class SiteController extends Controller
     public function show($id): Application|Factory|View|\Illuminate\Foundation\Application
     {
         $sites = Site::find($id);
-        return view('sitedangereux.resultat', ['site' => $sites]);
+        $username = User::findOrFail($sites->idUser)->name;
+        return view('sitedangereux.show', ['site' => $sites, 'username' => $username]);
     }
 
     public function create(): Application|Factory|View|\Illuminate\Foundation\Application
@@ -58,21 +60,15 @@ class SiteController extends Controller
     public function store(Request $request) : RedirectResponse
     {
         $site = new Site();
+
         $this->validate($request, [
             'adresse' => 'required',
             'description' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024|dimensions:max_width=1024,max_height=1024'
         ]);
-        $site->adresse_site = $request->adresse;
-        $site->description = $request->description;
-        $image = $request->file('image');
-        if($image != null) {
-            $fichier = $image->getClientOriginalExtension();
-            $location = storage_path('/app/image/');
-            $image->move($location, $fichier);
 
-            $site->image = $location;
-        }
+        $this->recupererDonnees($site, $request);
+
         try {
             $site->save();
         } catch (\Illuminate\Database\QueryException $e) {
@@ -82,11 +78,33 @@ class SiteController extends Controller
         }
 
         if (Auth::check()) {
-            $vote = new Vote();
-            $vote->idUser = Auth::id();
-            $vote->idSite = $site->id;
-            $vote->save();
+            $this->voterAuto($site);
         }
+
         return redirect('/');
+    }
+
+    private function recupererDonnees($site, $request) {
+        $site->adresse_site = $request->adresse;
+        $site->description = $request->description;
+        $image = $request->file('image');
+
+        if($image != null) {
+            $fichier = $image->getClientOriginalName();
+            $location = storage_path('/app/public/image');
+            $image->move($location, $fichier);
+
+            $site->image = $location.$fichier;
+        }
+
+        if (Auth::check()) {
+            $site->idUser = Auth::id();
+        }
+    }
+    private function voterAuto($site) {
+        $vote = new Vote();
+        $vote->idUser = Auth::id();
+        $vote->idSite = $site->id;
+        $vote->save();
     }
 }

@@ -11,13 +11,10 @@ class Site extends Model
     use HasFactory;
     use Searchable;
 
-    public function commentaires()
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasMany(Commentaire::class);
-    }
-    public function votes()
-    {
-        return $this->hasMany(Vote::class);
+        return $this->belongsTo(User::class);
     }
     public function toSearchableArray()
     {

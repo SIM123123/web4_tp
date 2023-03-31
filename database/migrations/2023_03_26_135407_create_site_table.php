@@ -16,8 +16,15 @@ return new class extends Migration
             $table->string('adresse_site')->unique();
             $table->text('description');
             $table->text('image')->nullable();
+            $table->unsignedBigInteger('idUser')->nullable();
             $table->timestamps();
+
+            $table->foreign('idUser')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
+
     }
 
     /**

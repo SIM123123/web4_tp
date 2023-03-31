@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Commentaire;
 use App\Models\Site;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,8 @@ class CommentaireFactory extends Factory
     {
         return [
             'commentaire' => $this->faker->text(),
-            'idSite' => Site::inRandomOrder()->first()->id
+            'idSite' => Site::inRandomOrder()->first()->id,
+            'idUser' =>User::inRandomOrder()->first()->id,
         ];
     }
 }

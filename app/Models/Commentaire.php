@@ -9,8 +9,12 @@ class Commentaire extends Model
 {
     use HasFactory;
 
-    public function site()
+    public function site(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Site::class);
+    }
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

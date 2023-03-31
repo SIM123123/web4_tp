@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Site;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -10,6 +12,7 @@ use Illuminate\Support\Str;
  */
 class SiteFactory extends Factory
 {
+    protected $model = Site::class;
     /**
      * Define the model's default state.
      *
@@ -20,7 +23,8 @@ class SiteFactory extends Factory
         return [
             'adresse_site' => $this->faker->domainName(),
             'description' => $this->faker->text(30),
-            'image' => $this->faker->filePath()
+            'image' => $this->faker->filePath(),
+            'idUser' => User::inRandomOrder()->first()
         ];
     }
 }
