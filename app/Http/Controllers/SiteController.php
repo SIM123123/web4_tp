@@ -25,6 +25,28 @@ class SiteController extends Controller
 
     public function welcome(Request $request) : View
     {
+        return view('welcome');
+    }
+
+    public function show($id): Application|Factory|View|\Illuminate\Foundation\Application
+    {
+        $sites = Site::find($id);
+        if ($sites->isUser != null) {
+            $username = User::findOrFail($sites->idUser);
+        }
+        else {
+            $username = "Anonyme";
+        }
+        return view('sitedangereux.show', ['site' => $sites, 'username' => $username]);
+    }
+
+    public function create(): Application|Factory|View|\Illuminate\Foundation\Application
+    {
+        return view('sitedangereux.create');
+    }
+
+    public function search(Request $request)
+    {
         if ($request->filled('search')) {
             $sites = Site::search($request->search)->get()->take(3);
             if (sizeof($sites) < 3) {
@@ -51,32 +73,9 @@ class SiteController extends Controller
         return view('welcome', compact('tableau'));
     }
 
-    public function show($id): Application|Factory|View|\Illuminate\Foundation\Application
+    public function preRemplir($nom):View
     {
-        $sites = Site::find($id);
-        if ($sites->isUser != null) {
-            $username = User::findOrFail($sites->idUser);
-        }
-        else {
-            $username = "Anonyme";
-        }
-        return view('sitedangereux.show', ['site' => $sites, 'username' => $username]);
-    }
-
-    public function create(): Application|Factory|View|\Illuminate\Foundation\Application
-    {
-        return view('sitedangereux.create');
-    }
-
-    public function search(Request $request){
-        // Get the search value from the request
-        $search = $request->input('search');
-
-        // Search in the title and body columns from the posts table
-        $site = Site::search($search)->get();
-
-        // Return the search view with the resluts compacted
-        return view('welcome', compact('site'));
+        return view('sitedangereux.create', ['nom' => $nom]);
     }
 
     public function store(Request $request) : RedirectResponse
