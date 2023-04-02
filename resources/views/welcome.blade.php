@@ -4,21 +4,33 @@
 <x-navbar>
     <div class="flex flex-col h-screen justify-center">
         <div class="flex justify-center items-center">
-            <h1 class="font-sans text-4xl mb-4">{{ __('welcome.Search') }}</h1>
+            <h1 class="font-bold text-amber-500 text-4xl mb-4">{{ __('welcome.Search') }}</h1>
         </div>
-        <div>
-            <form  action="{{route('search')}}" method="GET" class="flex items-center justify-center">
+        <div class="flex flex-col">
+            @csrf
+
+            @if ($errors->any())
+                <div class="w-1/2 place-self-center flex items-center justify-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form  action="{{route('search')}}" method="GET" class="flex items-center justify-center pt-3">
                 <input
                     type="search"
                     id="search"
                     name="search"
-                    class="w-1/2 bg-blue-200"
+                    class="w-1/2 bg-blue-200 rounded @error('search')  border-red-500 @enderror "
                     placeholder="{{ __('welcome.Search') }}"
                     aria-label="Search"
                     aria-describedby="button-addon1"
-                    value="<?= $_GET['search'] ?? "" ?>"/>
+                    value="{{ old('search')}}"/>
                 <button
-                    class="p-2 bg-blue-200"
+                    class="p-2"
                     type="submit"
                     id="button-addon1"
                     data-te-ripple-init
@@ -30,7 +42,7 @@
         <div class="flex flex-col items-center justify-center mt-5">
             @if(@isset($tableau))
                 @if( sizeof($tableau) != 0)
-                    <table class=" w-1/2 p-1 bg-blue-100 border-blue-500 border-2 border-solid ">
+                    <table class=" w-17 p-1 bg-blue-100 border-blue-500 border-2 border-solid ">
                         @foreach($tableau as $site)
                             <thead class=" text-xs text-amber-500 uppercase bg-blue-500">
                             <tr>

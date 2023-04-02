@@ -11,11 +11,15 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Http\UploadedFile;
+
+use function Psy\sh;
+use function Symfony\Component\String\s;
 
 class SiteController extends Controller
 {
@@ -64,6 +68,10 @@ class SiteController extends Controller
 
     public function search(Request $request)
     {
+        $regex = '/^.*[.].*/i';
+
+       $request->validate(['search' => 'required|regex:'.$regex,]);
+
         if ($request->filled('search')) {
                 $sites = Site::all();
                 $tableau = array();
@@ -77,9 +85,30 @@ class SiteController extends Controller
                         $shortest = $diff;
                     }
                     if($request->search == $site->adresse_site){
-                        $tableau = [];
-                        $tableau[] = $site;
-                        return view('welcome', compact('tableau'));
+
+                        $id = $site->id;
+                        if ($site->idUser != null) {
+                            $username = User::find($site->idUser)->name;
+                        }
+                        else {
+                            $username = "Anonyme";
+                        }
+
+                        $votes = Vote::where('idSite', $id)->count();
+                        $commentaires = Commentaire::where('idSite', $id)
+                            ->orderByDesc('created_at')
+                            ->get();
+
+                        $voteUser = \App\Models\Vote::where('idSite', $site->id)
+                            ->where('idUser', \Illuminate\Support\Facades\Auth::id())
+                            ->get();
+
+
+                        return view('sitedangereux.show', ['site' => $site,
+                            'username' => $username,
+                            'votes' => $votes,
+                            'voteUser' => $voteUser,
+                            'commentaires' => $commentaires]);
                     }
                 }
                 $tableau = array_reverse($tableau);
@@ -102,7 +131,8 @@ class SiteController extends Controller
 
         $attribute = $request->validate([
             'adresse_site' => 'required|url',
-            'description' => 'required'
+            'description' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024|dimensions:max_width=1024,max_height=1024'
         ]);
 
         $site = new Site($attribute);
