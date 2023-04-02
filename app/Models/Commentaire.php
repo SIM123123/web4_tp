@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Commentaire extends Model
 {
     use HasFactory;
+    protected $fillable = ['idSite', 'idUser', 'commentaire'];
 
     public function site(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Site;
 use App\Models\User;
+use App\Models\Vote;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,7 +24,6 @@ class SiteFactory extends Factory
         return [
             'adresse_site' => $this->faker->domainName(),
             'description' => $this->faker->text(30),
-            'image' => $this->faker->filePath(),
             'idUser' => User::inRandomOrder()->first()
         ];
     }

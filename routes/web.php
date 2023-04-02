@@ -32,7 +32,11 @@ Route::get('/sitedangereux/create', [SiteController::class, 'create'])->name('cr
 Route::post('/sitedangereux/create', [SiteController::class, 'store'])->name('store');
 Route::get('/sitedangereux/create{nom}',[SiteController::class, 'preRemplir'])->name('remplir');
 Route::get('/sitedangereux/{id}', [SiteController::class, 'show'])->name('show');
+Route::delete('/sitedangereux/{id}', [SiteController::class, 'destroy'])->name('destroy');
+Route::post('/sitedangereux/{id}/voter', [SiteController::class, 'voter'])->name('voter');
+Route::post('/sitedangereux/{id}/commenter', [SiteController::class, 'commenter'])->name('commenter');
 Route::get('/search',[SiteController::class, 'search'])->name('search');
+Route::get('/messites',[SiteController::class, 'lister'])->name('lister');
 
 
 

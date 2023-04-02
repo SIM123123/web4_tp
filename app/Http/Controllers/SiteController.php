@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commentaire;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\Vote;
@@ -12,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Http\UploadedFile;
 
@@ -30,14 +32,29 @@ class SiteController extends Controller
 
     public function show($id): Application|Factory|View|\Illuminate\Foundation\Application
     {
-        $sites = Site::find($id);
-        if ($sites->isUser != null) {
-            $username = User::findOrFail($sites->idUser);
+        $site = Site::find($id);
+        if ($site->idUser != null) {
+            $username = User::find($site->idUser)->name;
         }
         else {
             $username = "Anonyme";
         }
-        return view('sitedangereux.show', ['site' => $sites, 'username' => $username]);
+
+        $votes = Vote::where('idSite', $id)->count();
+        $commentaires = Commentaire::where('idSite', $id)
+                                ->orderByDesc('created_at')
+                                ->get();
+
+        $voteUser = \App\Models\Vote::where('idSite', $site->id)
+            ->where('idUser', \Illuminate\Support\Facades\Auth::id())
+            ->get();
+
+
+        return view('sitedangereux.show', ['site' => $site,
+            'username' => $username,
+            'votes' => $votes,
+            'voteUser' => $voteUser,
+            'commentaires' => $commentaires]);
     }
 
     public function create(): Application|Factory|View|\Illuminate\Foundation\Application
@@ -57,7 +74,7 @@ class SiteController extends Controller
                     $diff = levenshtein($request->search, $sitetest->adresse_site, 0);
 
                     if ($diff <= $shortest || $shortest < 0) {
-                        array_push($tableau, $sitetest);
+                        $tableau[] = $sitetest;
                         $shortest = $diff;
                     }
                 }
@@ -73,7 +90,7 @@ class SiteController extends Controller
         return view('welcome', compact('tableau'));
     }
 
-    public function preRemplir($nom):View
+    public function preRemplir($nom): Application|Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
     {
         return view('sitedangereux.create', ['nom' => $nom]);
     }
@@ -81,23 +98,8 @@ class SiteController extends Controller
     public function store(Request $request) : RedirectResponse
     {
         $site = new Site();
-        $this->validate($request, [
-            'adresse' => 'required',
-            'description' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024|dimensions:max_width=1024,max_height=1024'
-        ]);
-        $site->adresse_site = $request->adresse;
-        $site->description = $request->description;
-        $image = $request->file('image');
-        if($image != null) {
+        $this->recupererDonnees($site, $request);
 
-
-            $fichier = $image->getClientOriginalExtension();
-            $location = storage_path('/app/public/');
-            $image->move($location, $fichier);
-
-            $site->image = $location;
-        }
         try {
             $site->save();
         } catch (\Illuminate\Database\QueryException $e) {
@@ -106,12 +108,81 @@ class SiteController extends Controller
             }
         }
 
-        if (Auth::check()) {
-            $vote = new Vote();
-            $vote->idUser = Auth::id();
-            $vote->idSite = $site->id;
-            $vote->save();
+        $this->voterAuto($site);
+
+        return redirect()->route('show', ['id' => $site->id]);
+    }
+
+    public function destroy($id) {
+        $site = Site::findOrFail($id);
+
+        if(Storage::exists('/public/image/'.$site->image)){
+            Storage::delete('/public/image/'.$site->image);
         }
-        return redirect('/');
+
+        $site->delete();
+
+        return redirect()->route('lister')->with('success', 'Site supprimé!');
+    }
+
+    public function lister(): Application|Factory|View|\Illuminate\Foundation\Application
+    {
+        $sites = Site::where('idUser', Auth::id())->get();
+        $listeSites = array();
+        foreach ($sites as $site) {
+            $votes = Vote::where('idSite', $site->id )->count();
+            $listeSites[] = ["IdSite" => $site->id, "Adresse" => $site->adresse_site, "Votes" => $votes];
+        }
+
+        return view('sitedangereux.sites' , ['sites' => $listeSites]);
+    }
+
+    private function recupererDonnees($site, $request) {
+        $site->adresse_site = $request->adresse;
+        $site->description = $request->description;
+        $image = $request->file('image');
+
+        if($image != null) {
+            $fichier = $image->getClientOriginalName();
+            $location = storage_path('/app/public/image');
+            $image->move($location, $fichier);
+            $site->image = $fichier;
+        }
+
+        if (Auth::check()) {
+            $site->idUser = Auth::id();
+        }
+    }
+    private function voterAuto($site) {
+        $vote = new Vote();
+        $vote->idUser = Auth::id();
+        $vote->idSite = $site->id;
+        $vote->save();
+    }
+
+    public function commenter(Request $request) {
+        $site = Site::find($request->route('id'));
+
+
+        $idUser = Auth::id();
+
+        Commentaire::create([
+            'idSite' => $site->id,
+            'idUser' => $idUser,
+            'commentaire' => $request->get('commentaire')]);
+
+        return redirect()->route('show', ['id' => $site->id]);
+    }
+
+    public function voter(Request $request) {
+        $site = Site::find($request->route('id'));
+
+        $idUser = Auth::id();
+
+        Vote::create([
+            'idSite' => $site->id,
+            'idUser' => $idUser]);
+
+        return redirect()->route('show', ['id' => $site->id]);
     }
 }
