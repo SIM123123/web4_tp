@@ -9,15 +9,9 @@ use Laravel\Scout\Searchable;
 class Site extends Model
 {
     use HasFactory;
-    use Searchable;
-
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-    public function toSearchableArray()
-    {
-        return ['adresse_site' => $this->adresse_site];
     }
 }

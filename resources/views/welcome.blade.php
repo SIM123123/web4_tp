@@ -75,7 +75,7 @@
                                     {{ $site->created_at }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    {{ \App\Models\User::where('id', $site->idUser)->get()->first()->name }}
+                                    {{ \App\Models\User::where('id', $site->idUser)->get()->first()->name ?? "Anonyme" }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <a href="{{ route('show', [ 'id' => $site->id]) }}" class="text-blue-500 hover:text-amber-500">{{ __('welcome.Consult') }}</a>

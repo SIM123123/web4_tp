@@ -65,24 +65,26 @@ class SiteController extends Controller
     public function search(Request $request)
     {
         if ($request->filled('search')) {
-            $sites = Site::search($request->search)->get()->take(3);
-            if (sizeof($sites) < 3) {
                 $sites = Site::all();
                 $tableau = array();
                 $shortest = -1;
-                foreach ($sites as $sitetest) {
-                    $diff = levenshtein($request->search, $sitetest->adresse_site, 0);
+                foreach ($sites as $site) {
+                    $diff = levenshtein(strtolower($request->search),
+                        strtolower(preg_filter("/[.].*/i", "",$site->adresse_site)), 0);
 
                     if ($diff <= $shortest || $shortest < 0) {
-                        $tableau[] = $sitetest;
+                        $tableau[] = $site;
                         $shortest = $diff;
+                    }
+                    if($request->search == $site->adresse_site){
+                        $tableau = [];
+                        $tableau[] = $site;
+                        return view('welcome', compact('tableau'));
                     }
                 }
                 $tableau = array_reverse($tableau);
                 $tableau = array_slice($tableau, 0, 3);
                 return view('welcome', compact('tableau'));
-            }
-            $tableau = $sites;
         } else {
             $tableau = [];
         }
