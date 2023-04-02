@@ -99,7 +99,13 @@ class SiteController extends Controller
 
     public function store(Request $request) : RedirectResponse
     {
-        $site = new Site();
+
+        $attribute = $request->validate([
+            'adresse_site' => 'required|url',
+            'description' => 'required'
+        ]);
+
+        $site = new Site($attribute);
         $this->recupererDonnees($site, $request);
 
         try {
@@ -110,7 +116,10 @@ class SiteController extends Controller
             }
         }
 
-        $this->voterAuto($site);
+        if (Auth::check()) {
+            $site->idUser = Auth::id();
+            $this->voterAuto($site);
+        }
 
         return redirect()->route('show', ['id' => $site->id]);
     }
@@ -140,7 +149,7 @@ class SiteController extends Controller
     }
 
     private function recupererDonnees($site, $request) {
-        $site->adresse_site = $request->adresse;
+        $site->adresse_site = $request->adresse_site;
         $site->description = $request->description;
         $image = $request->file('image');
 
@@ -149,10 +158,6 @@ class SiteController extends Controller
             $location = storage_path('/app/public/image');
             $image->move($location, $fichier);
             $site->image = $fichier;
-        }
-
-        if (Auth::check()) {
-            $site->idUser = Auth::id();
         }
     }
     private function voterAuto($site) {
