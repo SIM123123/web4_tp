@@ -13,28 +13,28 @@
         @if (Route::has('login'))
             <div class=" flex flex-row place-content-center items-center sm:fixed sm:top-0 sm:right-0 p-2 text-right bg-blue-500 w-full">
                 <div>
-                    <h1  class="text-xl font-bold font-sans"> <a href="/"> SaferBrowser </a>  </h1>
+                    <h1  class="text-xl font-bold font-sans text-amber-500"> <a href="/"> SaferBrowser </a>  </h1>
                 </div>
 
                 <div class="grow h-14"></div>
 
-                <a href="/" class="font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Home') }}</a>
-                <a href="{{ route('create') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Add') }}</a>
+                <a href="/" class="font-semibold text-white hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Home') }}</a>
+                <a href="{{ route('create') }}" class="ml-4 font-semibold text-white hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Add') }}</a>
                 @auth
-                    <a href="{{ route('lister') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.List') }}</a>
+                    <a href="{{ route('lister') }}" class="ml-4 font-semibold text-white hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.List') }}</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <a href="{{ route('logout') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm"
+                        <a href="{{ route('logout') }}" class="ml-4 font-semibold text-white hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm"
                                          onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                             {{ __('header.Logout') }}
                         </a>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Connexion') }}</a>
+                    <a href="{{ route('login') }}" class="ml-4 font-semibold text-white hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Connexion') }}</a>
 
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-black focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Register') }}</a>
+                        <a href="{{ route('register') }}" class="ml-4 font-semibold text-white hover:text-amber-500 focus:outline focus:outline-2 focus:rounded-sm">{{ __('header.Register') }}</a>
                     @endif
                 @endauth
             </div>
